@@ -7,7 +7,7 @@ Contributors
 -----------
 - Jason Dreisbach
 - Anthony Lipscomb
-- Angelica Conception 
+- Anjelica Concepcion
 - Norman Tran
 - Michael Crivello
 
