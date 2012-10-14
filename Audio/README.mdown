@@ -1,0 +1,20 @@
+#Audio
+
+All of the testing so far has been on OS X 10.8.2 (12C60)
+ 
+
+## How To
+
+
+### Install libao
+
+    1. tar xvf libao-1.1.0.tar
+    2. cd libao-1.1.0
+    3. ./configure
+    4. make
+    5. sudo make install
+
+### Compile sine wave example 
+    1. cd ../sinewave
+    2. make
+    3. ./sinewave
