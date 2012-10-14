@@ -1,26 +1,24 @@
-/*
- *
- * ao_example.c
- *
- *     Written by Stan Seibert - July 2001
- *
- * Legal Terms:
- *
- *     This source file is released into the public domain.  It is
- *     distributed without any warranty; without even the implied
- *     warranty * of merchantability or fitness for a particular
- *     purpose.
- *
- * Function:
- *
- *     This program opens the default driver and plays a 440 Hz tone for
- *     one second.
- *
- * Compilation command line (for Linux systems):
- *
- *     gcc -lao -ldl -lm -o ao_example ao_example.c
- *
- */
+// *
+// * ao_example.c
+// *
+// *     Written by Stan Seibert - July 2001
+// *
+// * Legal Terms:
+// *
+// *     This source file is released into the public domain.  It is
+// *     distributed without any warranty; without even the implied
+// *     warranty * of merchantability or fitness for a particular
+// *     purpose.
+// *
+// * Function:
+// *
+// *     This program opens the default driver and plays a 440 Hz tone for
+// *     one second.
+// *
+// * Compilation command line (for Linux systems):
+// *
+// *     gcc -lao -ldl -lm -o ao_example ao_example.c
+// *
 
 #include <stdio.h>
 #include <ao/ao.h>
@@ -40,13 +38,13 @@ int main(int argc, char **argv)
 	float freq = 440.0;
 	int i;
 
-	/* -- Initialize -- */
+	 // -- Initialize -- 
 
 	fprintf(stderr, "libao example program\n");
 
 	ao_initialize();
 
-	/* -- Setup for default driver -- */
+	 // -- Setup for default driver -- 
 
 	default_driver = ao_default_driver_id();
 
@@ -56,14 +54,14 @@ int main(int argc, char **argv)
 	format.rate = 44100;
 	format.byte_format = AO_FMT_LITTLE;
 
-	/* -- Open driver -- */
-	device = ao_open_live(default_driver, &format, NULL /* no options */);
+	 // -- Open driver -- 
+	device = ao_open_live(default_driver, &format, NULL); // no options
 	if (device == NULL) {
 		fprintf(stderr, "Error opening device.\n");
 		return 1;
 	}
 
-	/* -- Play some stuff -- */
+	 // -- Play some stuff -- 
 	buf_size = format.bits/8 * format.channels * format.rate;
 	buffer = calloc(buf_size,
 			sizeof(char));
@@ -72,13 +70,21 @@ int main(int argc, char **argv)
 		sample = (int)(0.75 * 32768.0 *
 			sin(2 * M_PI * freq * ((float) i/format.rate)));
 
-		/* Put the same stuff in left and right channel */
+		// Put the same stuff in left and right channel 
 		buffer[4*i] = buffer[4*i+2] = sample & 0xff;
 		buffer[4*i+1] = buffer[4*i+3] = (sample >> 8) & 0xff;
+
+		sample = (int)(0.55 * 32768.0 *
+			sin(2 * M_PI * freq * ((float) i/format.rate)));
+
+		 // Put the same stuff in left and right channel 
+		buffer[4*i] += buffer[4*i+2] = sample & 0xff;
+		buffer[4*i+1] += buffer[4*i+3] = (sample >> 8) & 0xff;
+
 	}
 	ao_play(device, buffer, buf_size);
 
-	/* -- Close and shutdown -- */
+	 // -- Close and shutdown -- 
 	ao_close(device);
 
 	ao_shutdown();
