@@ -2,7 +2,7 @@
 
 TARGET = sinewave
 
-LFLAGS = -I ../libao-1.1.0/include/ -L ../libao-1.1.0/src/.libs -lao
+LFLAGS = -lao
 
 SRC =  main.c\
 
