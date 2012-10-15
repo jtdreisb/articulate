@@ -18,3 +18,18 @@ All of the testing so far has been on OS X 10.8.2 (12C60)
     1. cd ../sinewave
     2. make
     3. ./sinewave
+
+
+### Install mpg123
+	1. cd ..
+	2. tar xvzf mpg123-1.14.4.tar.bz2
+	3. cd mpg123-1.14.4
+	4. ./configure
+	5. make
+	6. sudo make install
+
+### Compile and run MP3 demo
+	1. cd  ../mp3
+	2. make
+	3. ./play_mp3 <path to mp3>
+	
