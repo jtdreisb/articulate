@@ -1,6 +1,8 @@
 package Windows;
 
 import java.awt.Dimension;
+
+import java.awt.BorderLayout;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -8,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+
+import Panels.MusicPanel;
+import Panels.PortsPanel;
 
 public class ArticuSoft extends JFrame {
 
@@ -28,6 +33,7 @@ public class ArticuSoft extends JFrame {
 	 */
 
 	public ArticuSoft() {
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(DIMENSIONS);
 		this.setLocation(WindowsInfrastructureMethods.getCenterPoint(DIMENSIONS));
 		
@@ -37,20 +43,20 @@ public class ArticuSoft extends JFrame {
 		Menu homeMenu = new Menu("Home");
 		MenuItem exitLink = new MenuItem("Exit");
 		exitLink.addActionListener(new ExitActionListener());
-		homeMenu.add(new MenuItem("Exit"));
+		homeMenu.addSeparator();
+		homeMenu.add(exitLink);
 		
 		windowMenu.add(homeMenu);
 		this.setMenuBar(windowMenu);
+		
+		setLayout(new BorderLayout());
+		this.add(new PortsPanel(), BorderLayout.NORTH);
+		this.add(new MusicPanel(), BorderLayout.WEST);
 	}
 	
 	private class ExitActionListener implements ActionListener {
-		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			System.out.println("Action Performed");
-			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			System.exit(0);
 		}
-		
 	}
 }
