@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
+import Panels.ActionButtons;
 import Panels.MusicPanel;
 import Panels.PortsPanel;
 
@@ -36,7 +37,6 @@ public class ArticuSoft extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(DIMENSIONS);
 		this.setLocation(WindowsInfrastructureMethods.getCenterPoint(DIMENSIONS));
-		
 		this.setTitle(TITLE);
 		
 		MenuBar windowMenu = new MenuBar();
@@ -52,6 +52,8 @@ public class ArticuSoft extends JFrame {
 		setLayout(new BorderLayout(10, 10));
 		this.add(new PortsPanel(), BorderLayout.NORTH);
 		this.add(new MusicPanel(this), BorderLayout.WEST);
+		
+		this.add(new ActionButtons(this), BorderLayout.SOUTH);
 	}
 	
 	private class ExitActionListener implements ActionListener {

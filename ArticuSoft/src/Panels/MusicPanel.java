@@ -6,7 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Panel;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 
 import Windows.ArticuSoft;
@@ -28,20 +27,25 @@ public class MusicPanel extends Panel {
 
 	public MusicPanel(ArticuSoft frame) {
 		mainframe = frame;
-		setLayout(new GridLayout(3, 2));
+		setLayout(new BorderLayout());
 		
 		addNewBtn = new JButton("Add new Sound");
 		addBtnListener = new BrowseActionListener(mainframe);
 		addNewBtn.addActionListener(addBtnListener);
-		addNewBtn.setSize(100, 50);
+		addNewBtn.setMaximumSize(new Dimension(50, 50));
 		
-		add(addNewBtn);
+		add(addNewBtn, BorderLayout.NORTH);
 		
 		tracks = new Object[0][0];
 		trackTable = new JTable(tracks, tableColumns);
 		trackTable.setSize(new Dimension(200, 100));
 		
-		add(trackTable.getTableHeader());
-		add(trackTable);
+		Panel tablepanel = new Panel();
+		tablepanel.setLayout(new BorderLayout());
+		tablepanel.add(trackTable.getTableHeader(), BorderLayout.PAGE_START);
+		tablepanel.add(trackTable, BorderLayout.CENTER);
+		add(tablepanel, BorderLayout.CENTER);
+		
+		this.setSize(300, 300);
 	}
 }
