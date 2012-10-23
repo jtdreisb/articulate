@@ -49,9 +49,9 @@ public class ArticuSoft extends JFrame {
 		windowMenu.add(homeMenu);
 		this.setMenuBar(windowMenu);
 		
-		setLayout(new BorderLayout());
+		setLayout(new BorderLayout(10, 10));
 		this.add(new PortsPanel(), BorderLayout.NORTH);
-		this.add(new MusicPanel(), BorderLayout.WEST);
+		this.add(new MusicPanel(this), BorderLayout.WEST);
 	}
 	
 	private class ExitActionListener implements ActionListener {
