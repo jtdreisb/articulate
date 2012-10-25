@@ -44,6 +44,7 @@ public class ArticuSoft extends JFrame {
 		this.setTitle(TITLE);
 		this.getContentPane().setBackground(new Color(37,141,200,1));
 		
+		
 		MenuBar windowMenu = new MenuBar();
 		Menu homeMenu = new Menu("Home");
 		MenuItem exitLink = new MenuItem("Exit");
