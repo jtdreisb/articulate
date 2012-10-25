@@ -6,6 +6,7 @@ import java.awt.Panel;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import Windows.ArticuSoft;
 
@@ -19,6 +20,7 @@ public class MusicPanel extends Panel {
 	
 	private JButton addNewBtn;
 	private JTable trackTable;
+	private DefaultTableModel tableModel;
 	
 	private Object[][] tracks;
 	
@@ -35,18 +37,21 @@ public class MusicPanel extends Panel {
 		
 		add(addNewBtn, BorderLayout.NORTH);
 		
-		tracks = new Object[10][10];
-		trackTable = new JTable(tracks, tableColumns);
+		tracks = new Object[][] { };
+		tableModel = new DefaultTableModel(tracks, tableColumns);
+		trackTable = new JTable(tableModel);
 		trackTable.setSize(new Dimension(200, 100));
 		
 		Panel tablepanel = new Panel();
 		tablepanel.setLayout(new BorderLayout());
 		tablepanel.add(trackTable.getTableHeader(), BorderLayout.PAGE_START);
 		tablepanel.add(trackTable, BorderLayout.CENTER);
-		add(tablepanel, BorderLayout.CENTER);		
+		add(tablepanel, BorderLayout.CENTER);
 	}
 	
 	public void addTrack(String file) {
-		
+		Object[] newRow = { 1, file };
+		tableModel.addRow(newRow);
+		trackTable.repaint();
 	}
 }
