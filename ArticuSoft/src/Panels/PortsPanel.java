@@ -3,6 +3,7 @@ package Panels;
 import gnu.io.CommPortIdentifier;
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Label;
 import java.awt.Panel;
 import java.util.ArrayList;
@@ -38,9 +39,12 @@ public class PortsPanel extends Panel {
 		setLayout(new FlowLayout());
 		
 		Label connection1 = new Label("Wearable suit on port ");
+		connection1.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		JComboBox portCombo = new JComboBox(portsStr);
 		Label connection2 = new Label(" is ");
+		connection2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		Label connectionState = new Label("Connected!");
+		connectionState.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		
 		add(connection1);
 		add(portCombo);

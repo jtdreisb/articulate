@@ -18,7 +18,11 @@ public class BrowseActionListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		filechooser.showOpenDialog(mainframe);
+		int action = filechooser.showOpenDialog(mainframe);
+		
+		if(action == JFileChooser.APPROVE_OPTION) {
+			mainframe.addTrack(filechooser.getSelectedFile().getAbsolutePath());
+		}
 	}
 
 }

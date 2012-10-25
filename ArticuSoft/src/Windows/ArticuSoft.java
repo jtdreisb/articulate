@@ -3,6 +3,8 @@ package Windows;
 import java.awt.Dimension;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -29,6 +31,8 @@ public class ArticuSoft extends JFrame {
 	
 	private static final long serialVersionUID = 6565821055076397067L;
 	
+	private MusicPanel mpanel;
+	
 	/*
 	 * Components 
 	 */
@@ -38,6 +42,7 @@ public class ArticuSoft extends JFrame {
 		this.setSize(DIMENSIONS);
 		this.setLocation(WindowsInfrastructureMethods.getCenterPoint(DIMENSIONS));
 		this.setTitle(TITLE);
+		this.getContentPane().setBackground(new Color(37,141,200,1));
 		
 		MenuBar windowMenu = new MenuBar();
 		Menu homeMenu = new Menu("Home");
@@ -46,14 +51,21 @@ public class ArticuSoft extends JFrame {
 		homeMenu.addSeparator();
 		homeMenu.add(exitLink);
 		
+		windowMenu.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		windowMenu.add(homeMenu);
 		this.setMenuBar(windowMenu);
 		
+		mpanel = new MusicPanel(this);
+		
 		setLayout(new BorderLayout(10, 10));
 		this.add(new PortsPanel(), BorderLayout.NORTH);
-		this.add(new MusicPanel(this), BorderLayout.WEST);
+		this.add(mpanel, BorderLayout.WEST);
 		
 		this.add(new ActionButtons(this), BorderLayout.SOUTH);
+	}
+	
+	public void addTrack(String directory) {
+		mpanel.addTrack(directory);
 	}
 	
 	private class ExitActionListener implements ActionListener {

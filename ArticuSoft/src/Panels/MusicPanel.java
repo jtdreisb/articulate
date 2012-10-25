@@ -2,7 +2,6 @@ package Panels;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Panel;
 
 import javax.swing.JButton;
@@ -36,7 +35,7 @@ public class MusicPanel extends Panel {
 		
 		add(addNewBtn, BorderLayout.NORTH);
 		
-		tracks = new Object[0][0];
+		tracks = new Object[10][10];
 		trackTable = new JTable(tracks, tableColumns);
 		trackTable.setSize(new Dimension(200, 100));
 		
@@ -44,8 +43,10 @@ public class MusicPanel extends Panel {
 		tablepanel.setLayout(new BorderLayout());
 		tablepanel.add(trackTable.getTableHeader(), BorderLayout.PAGE_START);
 		tablepanel.add(trackTable, BorderLayout.CENTER);
-		add(tablepanel, BorderLayout.CENTER);
+		add(tablepanel, BorderLayout.CENTER);		
+	}
+	
+	public void addTrack(String file) {
 		
-		this.setSize(300, 300);
 	}
 }
