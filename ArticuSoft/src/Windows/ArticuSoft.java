@@ -1,21 +1,28 @@
 package Windows;
 
+import gnu.io.CommPortIdentifier;
+
 import java.awt.Dimension;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 import Panels.ActionButtons;
+import Panels.ConsolePanel;
 import Panels.MusicPanel;
-import Panels.PortsPanel;
 
 public class ArticuSoft extends JFrame {
 
@@ -25,53 +32,103 @@ public class ArticuSoft extends JFrame {
 	
 	private static final String TITLE = "Articulate Wearable Dance Software";
 	
-	private static final int WINDOW_HEIGHT = 600;
-	private static final int WINDOW_WIDTH = 600;
-	private static final Dimension DIMENSIONS = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
-	
 	private static final long serialVersionUID = 6565821055076397067L;
 	
-	private MusicPanel mpanel;
+	private Toolkit tk = Toolkit.getDefaultToolkit();
 	
 	/*
 	 * Components 
 	 */
 
-	public ArticuSoft() {
+	public ArticuSoft() {		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(DIMENSIONS);
-		this.setLocation(WindowsInfrastructureMethods.getCenterPoint(DIMENSIONS));
 		this.setTitle(TITLE);
-		this.getContentPane().setBackground(new Color(37,141,200,1));
+		this.setFullScreen();
+		this.initializeMenuBar();
 		
+		this.setLayout(new GridBagLayout());
+		//GridBagConstraints c = new GridBagConstraints();
 		
-		MenuBar windowMenu = new MenuBar();
-		Menu homeMenu = new Menu("Home");
-		MenuItem exitLink = new MenuItem("Exit");
-		exitLink.addActionListener(new ExitActionListener());
-		homeMenu.addSeparator();
-		homeMenu.add(exitLink);
+		//c.gridy = 0;
+		//c.gridx = 0;
+		this.add(new MusicPanel());
 		
-		windowMenu.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-		windowMenu.add(homeMenu);
-		this.setMenuBar(windowMenu);
+		//c.gridx = 1;
+		this.add(new ConsolePanel());
 		
-		mpanel = new MusicPanel(this);
-		
-		setLayout(new BorderLayout(10, 10));
-		this.add(new PortsPanel(), BorderLayout.NORTH);
-		this.add(mpanel, BorderLayout.WEST);
-		
-		this.add(new ActionButtons(this), BorderLayout.SOUTH);
-	}
-	
-	public void addTrack(String directory) {
-		mpanel.addTrack(directory);
+		//c.gridy = 1;
+		//c.gridx = 0;
+		//c.gridwidth = 2;
+		this.add(new ActionButtons(this));
 	}
 	
 	private class ExitActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			System.exit(0);
 		}
+	}
+	
+	private void setFullScreen() {
+		int height, width;
+		height = tk.getScreenSize().height;
+		width = tk.getScreenSize().width;
+		this.setSize(new Dimension(width, height));
+	}
+	
+	private void initializeMenuBar() {
+		//Menu Bar
+		JMenuBar windowMenu = new JMenuBar();
+		createHomeMenu(windowMenu);
+		createToolsMenu(windowMenu);
+	}
+	
+	private void createHomeMenu(JMenuBar windowMenu) {
+		JMenu homeMenu = new JMenu("Home");
+		
+		//Home menu components
+		JMenuItem exitLink = new JMenuItem("Exit");
+		exitLink.addActionListener(new ExitActionListener());
+		
+		homeMenu.add(exitLink);			//Add Exit link
+		
+		windowMenu.add(homeMenu);
+	}
+	
+	private void createToolsMenu(JMenuBar windowMenu) {
+		JMenu toolsMenu = new JMenu("Tools");
+		windowMenu.add(toolsMenu);
+		
+		JMenu serialPortMenu = new JMenu("Serial Port");
+		ArrayList<JRadioButtonMenuItem> portItems = new ArrayList<JRadioButtonMenuItem>();
+		@SuppressWarnings("unchecked")
+		Enumeration<CommPortIdentifier> commPorts = CommPortIdentifier.getPortIdentifiers();
+		ArrayList<CommPortIdentifier> ports = new ArrayList<CommPortIdentifier>();
+		
+		while(commPorts.hasMoreElements()) {
+			CommPortIdentifier port = commPorts.nextElement();
+			if(port.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+				ports.add(port);
+			}
+		}
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		for(CommPortIdentifier port : ports) {
+			portItems.add(new JRadioButtonMenuItem(port.getName()));
+		}
+		
+		if(portItems.size() > 0) {
+			portItems.get(0).setSelected(true);
+		} else {
+			portItems.add(new JRadioButtonMenuItem("(none)"));
+		}
+		
+		for(JRadioButtonMenuItem port : portItems) {
+			group.add(port);
+			serialPortMenu.add(port);
+		}
+		
+		toolsMenu.add(serialPortMenu);
+		this.setJMenuBar(windowMenu);
 	}
 }

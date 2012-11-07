@@ -1,0 +1,8 @@
+/******
+ Open with Arduino IDE
+ Once uploaded to the arduino
+ 
+ using the arduino Serial Monitor or putty
+ monitor the serial port the arduino is attached to
+ 
+ touch pins with "thumb" pin to gaher desired effect

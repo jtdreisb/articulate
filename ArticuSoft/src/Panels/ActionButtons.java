@@ -22,5 +22,7 @@ public class ActionButtons extends Panel {
 		
 		add(startBtn);
 		add(stopBtn);
+		
+		mainframe.repaint();
 	}
 }

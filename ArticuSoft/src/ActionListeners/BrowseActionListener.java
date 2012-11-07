@@ -1,17 +1,19 @@
 package ActionListeners;
 
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 
-import Windows.ArticuSoft;
+import Panels.MusicPanel;
 
 public class BrowseActionListener implements ActionListener {
-	private ArticuSoft mainframe;
+	private JPanel mainframe;
 	private JFileChooser filechooser;
 	
-	public BrowseActionListener(ArticuSoft frame) {
+	public BrowseActionListener(JPanel frame) {
 		mainframe = frame;
 		filechooser = new JFileChooser();
 	}
@@ -21,7 +23,7 @@ public class BrowseActionListener implements ActionListener {
 		int action = filechooser.showOpenDialog(mainframe);
 		
 		if(action == JFileChooser.APPROVE_OPTION) {
-			mainframe.addTrack(filechooser.getSelectedFile().getAbsolutePath());
+			((MusicPanel)mainframe).addTrack(filechooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 

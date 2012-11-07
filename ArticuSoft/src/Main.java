@@ -6,8 +6,6 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		ArticuSoft window = new ArticuSoft();
-		window.setVisible(true);
-		window.repaint();
+		new ArticuSoft().setVisible(true);
 	}
 }
