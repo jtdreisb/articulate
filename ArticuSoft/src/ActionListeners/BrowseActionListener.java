@@ -1,6 +1,5 @@
 package ActionListeners;
 
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,8 +22,8 @@ public class BrowseActionListener implements ActionListener {
 		int action = filechooser.showOpenDialog(mainframe);
 		
 		if(action == JFileChooser.APPROVE_OPTION) {
-			((MusicPanel)mainframe).addTrack(filechooser.getSelectedFile().getAbsolutePath());
+			((MusicPanel)mainframe).addTrack(filechooser.getSelectedFile().getAbsolutePath(), filechooser.getSelectedFile().getName());
+			new PlayMusicThread(filechooser.getSelectedFile()).run();
 		}
 	}
-
 }

@@ -6,13 +6,13 @@ import java.awt.Dimension;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,6 +22,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import Panels.ActionButtons;
 import Panels.ConsolePanel;
+import Panels.ImagePanel;
 import Panels.MusicPanel;
 
 public class ArticuSoft extends JFrame {
@@ -47,19 +48,28 @@ public class ArticuSoft extends JFrame {
 		this.initializeMenuBar();
 		
 		this.setLayout(new GridBagLayout());
-		//GridBagConstraints c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 		
-		//c.gridy = 0;
-		//c.gridx = 0;
-		this.add(new MusicPanel());
+		c.weightx = 0.1;
+		c.weighty = 0.8;
+		c.gridy = 0;
+		c.gridx = 0;
+		c.fill = GridBagConstraints.BOTH;
+		ImagePanel imgpanel = new ImagePanel();
+		imgpanel.setBorder(BorderFactory.createLoweredBevelBorder());
+		this.add(imgpanel, c);
+		c.weightx = 0.6;
+		c.gridx = 1;
+		this.add(new MusicPanel(), c);
 		
-		//c.gridx = 1;
-		this.add(new ConsolePanel());
+		c.gridx = 2;
+		this.add(new ConsolePanel(), c);
 		
-		//c.gridy = 1;
-		//c.gridx = 0;
-		//c.gridwidth = 2;
-		this.add(new ActionButtons(this));
+		c.gridy = 2;
+		c.gridx = 0;
+		c.gridwidth = 3;
+		c.weighty = 0.1;
+		this.add(new ActionButtons(this), c);
 	}
 	
 	private class ExitActionListener implements ActionListener {
