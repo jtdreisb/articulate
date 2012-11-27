@@ -3,3 +3,6 @@ Sample/.DS_Store
 .metadata
 
 .DS_Store
+
+*.o
+
