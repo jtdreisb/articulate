@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 	char *buffer;
 	int buf_size;
 	int sample;
-	float freq = 440.0;
+	float freq = 400.0;
 	int i;
 
 	 // -- Initialize -- 
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
 	default_driver = ao_default_driver_id();
 
-        memset(&format, 0, sizeof(format));
+    memset(&format, 0, sizeof(format));
 	format.bits = 16;
 	format.channels = 2;
 	format.rate = 44100;
@@ -61,25 +61,48 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	 // -- Play some stuff -- 
+	 
 	buf_size = format.bits/8 * format.channels * format.rate;
 	buffer = calloc(buf_size,
 			sizeof(char));
 
+	// -- Play some stuff --
+	// for (i = 0; i < format.rate; i++) {
+	// 	sample = (int)(0.75 * 32768.0 * sin(2 * M_PI * freq * ((float) i/format.rate)));
+
+	// 	 Put the same stuff in left and right channel 
+	// 	buffer[4*i] = buffer[4*i+2] = sample & 0xff;
+	// 	buffer[4*i+1] = buffer[4*i+3] = (sample >> 8) & 0xff;
+	// }
 	for (i = 0; i < format.rate; i++) {
-		sample = (int)(0.75 * 32768.0 *
-			sin(2 * M_PI * freq * ((float) i/format.rate)));
+		sample = (int)(0.75 * 32768.0 * sin(2 * M_PI * freq * ((float) i/format.rate)));
 
 		// Put the same stuff in left and right channel 
-		buffer[4*i] = buffer[4*i+2] = sample & 0xff;
-		buffer[4*i+1] = buffer[4*i+3] = (sample >> 8) & 0xff;
 
-		sample = (int)(0.55 * 32768.0 *
-			sin(2 * M_PI * freq * ((float) i/format.rate)));
+		// left
+		// buffer[4*i] = sample & 0xff;
+		// buffer[4*i+1] = (sample >> 8) & 0xff;
 
-		 // Put the same stuff in left and right channel 
-		buffer[4*i] += buffer[4*i+2] = sample & 0xff;
-		buffer[4*i+1] += buffer[4*i+3] = (sample >> 8) & 0xff;
+
+		// right
+		buffer[4*i+2] = sample & 0xff;
+		buffer[4*i+3] = (sample >> 8) & 0xff;
+
+	}
+	ao_play(device, buffer, buf_size);
+
+	for (i = 0; i < format.rate; i++) {
+		sample = (int)(0.75 * 32768.0 * sin(2 * M_PI * freq * ((float) i/format.rate)));
+
+		// Put the same stuff in left and right channel 
+		
+		// left
+		buffer[4*i] = sample & 0xff;
+		buffer[4*i+1] = (sample >> 8) & 0xff;
+
+		// right
+		buffer[4*i+2] = 0;
+		buffer[4*i+3] = 0;
 
 	}
 	ao_play(device, buffer, buf_size);
