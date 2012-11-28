@@ -1,0 +1,9 @@
+# Articulate Audio Engine
+
+### The articulate audio engine will:
+* Read .wav and .mp3 files as input
+* Receive commands over a socket
+* Modify sound output in real time
+* Generate sounds
+
+
