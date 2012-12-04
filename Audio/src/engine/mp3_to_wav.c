@@ -101,7 +101,6 @@ void completeConversion(struct mp3_conversion_ctx *context)
     tmp32 = total - (context->dataoffset + 4);
 
     fwrite(&tmp32, 1, 4, context->outputFile);
-    
 }
 
 
@@ -157,6 +156,7 @@ int mp3_to_wav(char *mp3_file_path, char *wav_file_path)
     }
     
     // Use float output
+    // status = mpg123_format(m, 44100, MPG123_MONO | MPG123_STEREO,  MPG123_ENC_FLOAT_32);MPG123_ENC_16
     status = mpg123_format(m, 44100, MPG123_MONO | MPG123_STEREO,  MPG123_ENC_FLOAT_32);
     if(status != MPG123_OK) {
         fprintf(stderr,"Unable to set float output formats: %s\n", mpg123_plain_strerror(status));
@@ -176,7 +176,6 @@ int mp3_to_wav(char *mp3_file_path, char *wav_file_path)
         if(len <= 0)
             break;
         status = mpg123_feed(m, buf, len);
-
         while(status != MPG123_ERR && status != MPG123_NEED_MORE) {
             status = mpg123_decode_frame(m, &num, &audio, &bytes);
             if(status == MPG123_NEW_FORMAT) {
