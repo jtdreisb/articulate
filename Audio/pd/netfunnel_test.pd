@@ -137,9 +137,9 @@
 #X obj 105 107 vsl 15 80 0 1 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 0 1;
 #X obj 148 111 vsl 15 80 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 0 1;
+-1 -1 6715 1;
 #X obj 202 114 vsl 15 80 0 1 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 0 1;
+-1 -1 6715 1;
 #X msg 193 203 roomsize \$1;
 #X msg 85 201 wet \$1;
 #X msg 140 198 dry \$1;

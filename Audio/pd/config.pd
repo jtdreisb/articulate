@@ -1,0 +1,8 @@
+#N canvas 789 170 450 300 10;
+#X floatatom 178 -24 5 0 0 0 - - -;
+#X obj 92 -1 print tcp;
+#X text 115 -26 # Clients:;
+#X obj 91 -54 netreceive 8888;
+#X obj 80 190 outlet;
+#X connect 3 0 1 0;
+#X connect 3 1 0 0;
