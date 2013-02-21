@@ -9,6 +9,7 @@
 #X msg 138 -65 open \$1;
 #X msg 221 -10 print;
 #X obj 137 -39 t b a;
+#X obj 423 11 mp3play~;
 #X connect 0 0 6 0;
 #X connect 1 0 0 0;
 #X connect 4 0 3 0;
