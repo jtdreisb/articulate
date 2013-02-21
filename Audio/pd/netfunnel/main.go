@@ -2,19 +2,27 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"github.com/tarm/goserial"
 	"log"
 	"net"
 )
 
+var PortName = "/dev/tty.usbserial-A4013GAY"
+
 func main() {
 
+	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		PortName = flag.Args()[0]
+	}
+
 	xbeeCFG := new(serial.Config)
-	xbeeCFG.Name = "/dev/tty.usbserial-A4013GAY"
+	xbeeCFG.Name = PortName
 	xbeeCFG.Baud = 9600
 
-	fmt.Println("open port")
 	xbeeFile, err := serial.OpenPort(xbeeCFG)
 	fmt.Println("port opened")
 	if err != nil {
