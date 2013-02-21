@@ -12,6 +12,10 @@ int serial_init(const char* serialport, int baud);
 void handleInput(int fd);
 
 
+void mp3_init(char *mp3_file_0, char *mp3_file_1);
+void mp3_play();
+void mp3_handle_input(unsigned char *buffer, size_t buf_size);
 
-void sin_generate(ao_sample_format format, char *buffer, size_t buf_size);
+void sin_init();
+void sin_play();
 void sin_handle_input(unsigned char *buffer, size_t buf_size);

@@ -8,10 +8,8 @@
 #include <sys/select.h>
 #include "engine.h"
 
-
 // -- Globals -- //
-GLOBAL_MODE global_mode = SIN_WAVE_MODE;
-
+GLOBAL_MODE global_mode = MP3_MODE;
 
 int main(int argc, char **argv)
 {
@@ -21,44 +19,17 @@ int main(int argc, char **argv)
     tv.tv_sec = 0;
     tv.tv_usec = 0;
 
-    ao_device *device;
-    ao_sample_format format;
-    int default_driver;
-    char *buffer;
-    int buf_size;
+    int input_fd = serial_init("/dev/tty.usbserial-A4013GAY", 9600);
 
-    if (argc < 2) {
-        // fprintf(stderr, "usage: %s <input> [output.wav]\n", argv[0]);
-    }
-    else if (argc == 3) {
-        // status =  mp3_to_wav(argv[1], argv[2]);
-        // Error check
-        // argv[1] = argv[2];
-    }
-
-    // int input_fd = serial_init("/dev/stdin", 9600);
-    int input_fd = STDIN_FILENO;
+    // int input_fd = STDIN_FILENO;
 
     // -- Initialize -- //
     ao_initialize();
 
-    // -- Setup for default driver -- //
-    default_driver = ao_default_driver_id();
+    sin_init();
+    mp3_init("hey.mp3", "ho.mp3");
 
-    memset(&format, 0, sizeof(format));
-    format.bits = 16;
-    format.channels = 2;
-    format.rate = 44100;
-
-    buf_size = (size_t)format.bits/8 * format.channels * format.rate / 50;
-    buffer = malloc(buf_size * sizeof(char));
-
-    // -- Open driver -- //
-    device = ao_open_live(default_driver, &format, NULL); // no options
-    if (device == NULL) {
-        fprintf(stderr, "Error opening device.\n");
-        return 1;
-    }
+    write(input_fd, "s", 1);
 
     for (;;) {
         
@@ -77,17 +48,14 @@ int main(int argc, char **argv)
             case SQUARE_WAVE_MODE:
             case SAWTOOTH_WAV_MODE:
             case MP3_MODE:
-
+                mp3_play();
                 break;
             case SIN_WAVE_MODE:
             default:
-                sin_generate(format, buffer, buf_size);
+                sin_play();
                 break;
         }
-        ao_play(device, buffer, buf_size);
     }
-    // -- Close and shutdown -- 
-    ao_close(device);
 
     ao_shutdown();
 
@@ -110,6 +78,8 @@ void handleInput(int fd)
         case SQUARE_WAVE_MODE:
         case SAWTOOTH_WAV_MODE:
         case MP3_MODE:
+            mp3_handle_input(buffer, nread);
+            break;
         case SIN_WAVE_MODE:
         default:
             sin_handle_input(buffer, nread);

@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     mpg123_init();
     mh = mpg123_new(NULL, &err);
     buffer_size = mpg123_outblock(mh);
-    buffer = (unsigned char*) malloc(buffer_size * sizeof(unsigned char));
+    buffer = (unsigned char *) malloc(buffer_size * sizeof(unsigned char));
 
     /* open the file and get the decoding format */
     mpg123_open(mh, argv[1]);
