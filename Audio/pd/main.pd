@@ -23,7 +23,6 @@
 #X obj 106 361 symbol;
 #X obj 106 326 r ACC_R_X;
 #X msg 719 197 STATE 0 0 ACC L X bitcrush;
-#X msg 559 522 s ACC_R_X;
 #X obj 401 686 print bitcrush;
 #X obj 403 660 r ACC-bitcrush;
 #X msg 67 433 \; ACC-\$2 \$1;
@@ -31,7 +30,7 @@
 #X obj 74 400 pack 0 s;
 #X obj 83 311 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 559 500 pack s;
+#X obj 432 448 set;
 #X connect 0 0 6 0;
 #X connect 0 0 7 0;
 #X connect 1 0 6 1;
@@ -39,10 +38,9 @@
 #X connect 2 0 6 2;
 #X connect 2 0 7 0;
 #X connect 7 0 6 0;
-#X connect 8 0 27 0;
+#X connect 8 0 26 0;
 #X connect 8 6 9 1;
 #X connect 8 7 9 2;
-#X connect 9 0 30 0;
 #X connect 10 0 8 0;
 #X connect 11 0 8 0;
 #X connect 12 0 8 0;
@@ -50,14 +48,13 @@
 #X connect 14 0 16 0;
 #X connect 15 0 17 0;
 #X connect 18 0 19 0;
-#X connect 20 0 28 1;
+#X connect 20 0 27 1;
 #X connect 21 0 20 0;
 #X connect 21 0 17 0;
 #X connect 22 0 9 0;
-#X connect 25 0 24 0;
-#X connect 27 0 28 0;
+#X connect 24 0 23 0;
+#X connect 26 0 27 0;
+#X connect 27 0 25 0;
+#X connect 27 0 19 0;
+#X connect 28 0 20 0;
 #X connect 28 0 26 0;
-#X connect 28 0 19 0;
-#X connect 29 0 20 0;
-#X connect 29 0 27 0;
-#X connect 30 0 23 0;
