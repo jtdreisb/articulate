@@ -1,14 +1,15 @@
-#N canvas 555 110 723 609 10;
+#N canvas 548 29 723 609 10;
 #X obj 101 106 cnv 15 600 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
-#X obj 125 498 dac~;
-#X obj 112 388 lib/st-bitcrusher;
-#X obj 199 328 / 100;
-#X floatatom 199 299 5 0 0 0 - - -;
-#X obj 323 383 print foo;
-#X msg 198 359 gain \$1;
-#X connect 3 0 6 0;
-#X connect 4 0 3 0;
-#X connect 6 0 2 2;
-#X connect 6 0 5 0;
+#X obj 125 749 dac~;
+#X obj 114 122 lib/smp-play2;
+#X msg 312 69 duration 0;
+#X msg 132 62 0.45;
+#X obj 116 245 effects;
+#X connect 2 0 5 0;
+#X connect 2 1 5 1;
+#X connect 3 0 2 1;
+#X connect 4 0 2 0;
+#X connect 5 0 1 0;
+#X connect 5 1 1 1;
 #X coords 0 -1 1 1 602 102 1 100 100;
