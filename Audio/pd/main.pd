@@ -9,14 +9,16 @@
 #X obj 328 -58 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 49 54 suit;
-#X obj 559 293 config;
+#X obj 539 343 config;
 #X msg 27 -69 BTN R 1;
 #X msg 46 -35 BTN R 10;
 #X msg 94 -63 BTN L 1;
 #X msg 113 -29 BTN L 10;
-#X msg 719 197 STATE 0 0 ACC L X bitcrush;
+#X msg 529 317 STATE 0 0 ACC L X bitcrush;
 #X text 185 375 TODO: route the accelerometer value to the ouput block
 ;
+#X msg 51 315 \; \$0-\$1 hello;
+#X obj 512 563 print;
 #X connect 0 0 6 0;
 #X connect 0 0 7 0;
 #X connect 1 0 6 1;
@@ -26,6 +28,7 @@
 #X connect 7 0 6 0;
 #X connect 8 6 9 1;
 #X connect 8 7 9 2;
+#X connect 9 0 17 0;
 #X connect 10 0 8 0;
 #X connect 11 0 8 0;
 #X connect 12 0 8 0;
