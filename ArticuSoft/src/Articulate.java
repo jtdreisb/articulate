@@ -1,6 +1,7 @@
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,7 +23,6 @@ public class Articulate {
 	private static Display display;
 	private static Shell shell;
 	private static Browser browser;
-	private static JFrame frame;
 	private static Process child;
 	private static AudioEngine ae;
 
@@ -30,11 +30,14 @@ public class Articulate {
 	public static final String MP3 = "mp3";
 	public static final String WAV = "wav";
 	public static final String MIDI = "midi";
+	
+	public static boolean isReady = false;
+	
+	public static ArrayList<AudioEngineConfiguration> configurations;
 
 	public Articulate(Dimension size) {
-		frame = new JFrame();
-		frame.pack();
-
+		configurations = new ArrayList<AudioEngineConfiguration>();
+		
 		display = new Display();
 		shell = new Shell(display, SWT.NO_TRIM | SWT.ON_TOP);
 		shell.setSize(size.width, size.height);
@@ -44,11 +47,12 @@ public class Articulate {
 		browser.setUrl(URL);
 		shell.setLocation(0, 0);
 		shell.setFullScreen(true);
+		browser.setJavascriptEnabled(true);
 		shell.open();
 
 		addHtmlListener(browser, "javabuttonclick");
-		addConfigListener(browser, "obtainconfiguration");
-		addReadyListener(browser, "ready");		
+		addConfigListener(browser, "sendconfig");
+		addReadyListener(browser, "ready");
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
 				display.sleep();
@@ -109,7 +113,10 @@ public class Articulate {
 		}
 		
 		public Object function(Object[] arguments) {
-			loadDefaultSounds();
+			if(!isReady) {
+				loadDefaultSounds();
+			}
+			isReady = true;
 			return null;
 		}
 		
@@ -131,19 +138,31 @@ public class Articulate {
 		}
 		
 		public Object function(Object[] arguments) {
-			System.out.println("Configuration = " + arguments[0]);
+			System.out.println("lhandstate = " + arguments[0]);
+			System.out.println("rhandstate = " + arguments[1]);
+			System.out.println("audio = " + arguments[2]);
+			System.out.println("left axis = " + arguments[3]);
+			System.out.println("left effect = " + arguments[4]);
+			System.out.println("right axis = " + arguments[5]);
+			System.out.println("right effect = " + arguments[6]);
+			
+			Handstate left = Handstate.values()[Integer.parseInt((String)arguments[0])];
+			Handstate right = Handstate.values()[Integer.parseInt((String)arguments[1])];
+			String audio = (String) arguments[3];
+			Mode mode = Mode.ENTER;
+			
+			if(audio != null && !audio.equals("")) {
+				AudioEngine.SoundConfiguration sc = new AudioEngine.SoundConfiguration(left, right, mode, audio);
+				configurations.add(sc);
+			}
+			
 			return null;
 		}
 	}
 	
 	private static class StartFunction extends BrowserFunction {
-		JFileChooser ch;
-
 		StartFunction(Browser browser, String name) {
 			super(browser, name);
-			ch = new JFileChooser();
-			ch.setAcceptAllFileFilterUsed(true);
-			ch.addChoosableFileFilter(new MusicFilter());
 		}
 		
 		public Object function(Object[] arguments) {
@@ -152,9 +171,7 @@ public class Articulate {
 
 			if (btn.equals("start")) {
 				start();
-			} else if (btn.equals("upload")) {
-				upload();
-			} else if (btn.equals("stop")) {
+			}else if (btn.equals("stop")) {
 				ae.dispose();
 				child.destroy();
 			} else if(btn.equals("exit")) {
@@ -196,26 +213,6 @@ public class Articulate {
 				//Don't know why we would be here
 			} finally {
 				System.exit(0);
-			}
-		}
-		
-		private void upload() {
-			if (ch.isShowing()) {
-				return;
-			}
-			frame.setAlwaysOnTop(true);
-			frame.setSize(0, 0);
-			frame.setVisible(true);
-
-			int option = ch.showOpenDialog(frame);
-			frame.setVisible(false);
-			switch (option) {
-			case JFileChooser.APPROVE_OPTION:
-				Track track = new Track(ch.getSelectedFile().getName(), ch.getSelectedFile().getAbsolutePath());
-				browser.execute("loadtrack(" + track.toString() + ");");
-				break;
-			case JFileChooser.CANCEL_OPTION:
-				break;
 			}
 		}
 	}

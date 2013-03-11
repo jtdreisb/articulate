@@ -1,4 +1,4 @@
 
 public enum Sensor {
-	Accelerometer, Magnetometer, Gyroscope
+	ACC, MGN, GYR
 }

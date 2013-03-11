@@ -1,4 +1,4 @@
 
 public enum Mode {
-	ACCELEROMETER, ENTER, EXIT
+	ACC, ENTER, EXIT
 }

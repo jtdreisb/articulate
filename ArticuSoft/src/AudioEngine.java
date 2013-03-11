@@ -54,6 +54,7 @@ public class AudioEngine {
 		}
 		
 		public String toString() {
+			//STATE HANDSTATE_L HANDSTATE_R ENTER/EXIT SOUND
 			return String.format("STATE %0%1 %2 %3", right, left, mode, soundClip);
 		}
 	}
@@ -61,16 +62,14 @@ public class AudioEngine {
 	public static class EffectConfiguration implements AudioEngineConfiguration {
 		private Handstate right;
 		private Handstate left;
-		private Mode mode;
 		private Side side;
 		private AccelerometerDirection direction;
 		private String effect;
 		private Sensor sensor;
 		
-		public EffectConfiguration(Handstate r, Handstate l, Mode mode, Sensor sensor, Side s, AccelerometerDirection dir, String effect) {
+		public EffectConfiguration(Handstate r, Handstate l, Sensor sensor, Side s, AccelerometerDirection dir, String effect) {
 			right = r;
 			left = l;
-			this.mode = mode;
 			this.sensor = sensor;
 			side = s;
 			direction = dir;
@@ -78,7 +77,8 @@ public class AudioEngine {
 		}
 		
 		public String toString() {
-			return String.format("STATE %0%1 %2 %3 %4 %5 %6", right, left, mode, sensor, side, direction, effect);
+			//STATE HANDSTATE_L HANDSTATE_R SENSOR (L/R) (X/Y/Z) (EFFECT [modulation index]<Format ex: bitcrush 0>)
+			return String.format("STATE %0%1 %2 %3 %4 %5", left, right, sensor, side, direction, effect);
 		}
 	}
 }

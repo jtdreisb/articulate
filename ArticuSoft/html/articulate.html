@@ -73,6 +73,10 @@
 				background-color: #b5bdc8;
 				
 			}
+			
+			.alert {
+				position: fixed;
+			}
 		</style>
 		<script src="js/jquery.js"></script>
 		<script src="js/jqueryui.js"></script>
@@ -104,6 +108,10 @@
 				<div class="span12">
 					<h3 class="fancy" style="text-align: center">Articulate Configuration</h3>
 					<p class="center"><button class="btn button btn-success btn-large" id="start" data-loading-text="Loading...">Start</button></p>
+					<div class="alert fade in hide center alert-success span6 offset3">
+						<button type="button" class="close" data-dismiss="alert">X</button>
+						<strong>Success!</strong> Configuration added.
+					  </div>
 					<div class="row">
 						<div class="span4 offset4">
 							<div class="progress progress-striped active" id="display-progress">
@@ -122,6 +130,14 @@
 				</div>
 				<div class="span8 green well side">
 					<div class="row">
+						<div class="span10 offset1 well">
+							<h3 class="center">Background Track<br/>
+							<select name="audio" class="audio">
+								<option value="-1">None</option>
+							</select></h3>
+						</div>
+					</div>
+					<div class="row">
 						<div class="span3 offset1 well" id="handstate">
 							<div class="nav nav-list">
 								<p class="nav-header center">Handstate</p>
@@ -136,29 +152,29 @@
 								<div class="row">
 									<div class="span5 offset1">
 										<label class="radio">
-											<input type="radio" name="left-handstate" class="handstate" id="left-index" value="11">
+											<input type="radio" name="left-handstate" class="handstate" id="left-index" value="1">
 											Index
 										</label>
 										<label class="radio">
-											<input type="radio" name="left-handstate" class="handstate" id="left-middle" value="12">
+											<input type="radio" name="left-handstate" class="handstate" id="left-middle" value="2">
 											Middle
 										</label>
 										<label class="radio">
-											<input type="radio" name="left-handstate" class="handstate" id="left-none" value="10" checked>
+											<input type="radio" name="left-handstate" class="handstate" id="left-none" value="0" checked>
 											None
 										</label>
 									</div>
 									<div class="span5 offset1">
 										<label class="radio">
-											<input type="radio" name="right-handstate" class="handstate" id="right-index" value="01">
+											<input type="radio" name="right-handstate" class="handstate" id="right-index" value="1">
 											Index
 										</label>
 										<label class="radio">
-											<input type="radio" name="right-handstate" class="handstate" id="right-middle" value="02">
+											<input type="radio" name="right-handstate" class="handstate" id="right-middle" value="2">
 											Middle
 										</label>
 										<label class="radio">
-											<input type="radio" name="right-handstate" class="handstate" id="right-none" value="00" checked>
+											<input type="radio" name="right-handstate" class="handstate" id="right-none" value="0" checked>
 											None
 										</label>
 									</div>
@@ -171,111 +187,135 @@
 									<div class="control-group">
 										<label class="control-label" for="audio">Audio</label>
 										<div class="controls">
-											<select name="audio" class="selectBox" id="audio" style="display: none;">
-												<optgroup label="Audio" id="audio-optgroup">
-													<option value="1">Item 1</option>
+											<select name="audio" class="audio" id="handstate-audio">
+												<option value="-1">None</option>
+											</select>
+										</div>
+									 </div>
+									 <div class="control-group">
+										<label class="control-label" for="effect">Effect from left</label>
+										<div class="controls">
+											<select class="span2" id="left-axis">
+												<option value="l0"> X </option>
+												<option value="l1"> Y </option>
+												<option value="l2"> Z </option>
+											</select>
+											<select name="effect" id="left-effect" class="selectBox" style="display: none;" id="left-effect">
+												<optgroup value="None" label="None" data-value="none">
+													<option value="-1">None</option>
+												</optgroup>
+												<optgroup value="BitCrush" label="BitCrush" data-value="bitcrush">
+													<option data-parent="BitCrush" value="bitdepth">Bit Depth</option>
+													<option data-parent="BitCrush" value="samplerate">Sample Rate</option>
+													<option data-parent="BitCrush" value="bitcrushgain">Gain</option>
+												</optgroup>
+												<optgroup label="Vibrato" data-value="vibrato">
+													<option data-parent="Vibrato" value="speed">Speed</option>
+													<option data-parent="Vibrato" value="depth">Depth</option>
+													<option data-parent="Vibrato" value="feedback">Feedback</option>
+													<option data-parent="Vibrato" value="vibratogain">Gain</option>
+												</optgroup>
+												<optgroup label="Pitch Shift" data-value="pitchshift">
+													<option  data-parent="Pitch Shift" value="transpose">Transpose</option>
+													<option  data-parent="Pitch Shift" value="window">Window</option>
+													<option  data-parent="Pitch Shift" value="delay">Delay</option>
+													<option  data-parent="Pitch Shift" value="pitchshiftgain">Gain</option>
+												</optgroup>
+												<optgroup label="Reverb" data-value="reverb">
+													<option  data-parent="Reverb" value="dry">Dry</option>
+													<option  data-parent="Reverb" value="wet">Wet</option>
+													<option  data-parent="Reverb" value="time">Time</option>
+													<option  data-parent="Reverb" value="reverbgain">Gain</option>
 												</optgroup>
 											</select>
 										</div>
 									 </div>
 									 <div class="control-group">
-										<label class="control-label" for="effect">Effect</label>
+										<label class="control-label" for="effect">Effect from right</label>
 										<div class="controls">
-											<select name="effect" class="selectBox" style="display: none;">
-					<optgroup label="Section 1">
-						<option value="1">Item 1</option>
-						<option value="2">Item 2</option>
-						<option value="3">Item 3</option>
-						<option value="4">Item 4</option>
-					</optgroup>
-					<optgroup label="Section 2">
-						<option value="5">Item 5</option>
-						<option value="6">Item 6</option>
-						<option value="7">Item 7</option>
-						<option value="8">Item 8</option>
-					</optgroup>
-					<optgroup label="Section 3">
-						<option value="9">Item 9</option>
-						<option value="10">Item 10</option>
-						<option value="11">Item 11</option>
-						<option value="12">Item 12</option>
-					</optgroup>
-					<optgroup label="Section 4">
-						<option value="13">Item 13</option>
-						<option value="14">Item 14</option>
-						<option value="15">Item 15</option>
-						<option value="16">Item 16</option>
-					</optgroup>
-					<optgroup label="Section 5">
-						<option value="17">Item 17</option>
-						<option value="18">Item 18</option>
-						<option value="19">Item 19</option>
-						<option value="20">Item 20</option>
-					</optgroup>
-					<optgroup label="Section 6">
-						<option value="21">Item 21</option>
-						<option value="22">Item 22</option>
-						<option value="23">Item 23</option>
-						<option value="24">Item 24</option>
-					</optgroup>
-				</select>
+											<select class="span2" id="right-axis">
+												<option value="r0"> X </option>
+												<option value="r1"> Y </option>
+												<option value="r2"> Z </option>
+											</select>
+											<select id="right-effect" class="selectBox" style="display: none;" id="right-effect">
+												<optgroup value="None" label="None" data-value="none">
+													<option value="-1">None</option>
+												</optgroup>
+												<optgroup value="right-BitCrush" label="BitCrush" data-value="bitcrush">
+													<option data-parent="BitCrush" value="right-bitdepth">Bit Depth</option>
+													<option data-parent="BitCrush" value="right-samplerate">Sample Rate</option>
+													<option data-parent="BitCrush" value="right-bitcrushgain">Gain</option>
+												</optgroup>
+												<optgroup label="Vibrato" data-value="vibrato">
+													<option data-parent="Vibrato" value="right-speed">Speed</option>
+													<option data-parent="Vibrato" value="right-depth">Depth</option>
+													<option data-parent="Vibrato" value="right-feedback">Feedback</option>
+													<option data-parent="Vibrato" value="right-vibratogain">Gain</option>
+												</optgroup>
+												<optgroup label="Pitch Shift" data-value="pitchshift">
+													<option  data-parent="Pitch Shift" value="right-transpose">Transpose</option>
+													<option  data-parent="Pitch Shift" value="right-window">Window</option>
+													<option  data-parent="Pitch Shift" value="right-delay">Delay</option>
+													<option  data-parent="Pitch Shift" value="right-pitchshiftgain">Gain</option>
+												</optgroup>
+												<optgroup label="Reverb" data-value="reverb">
+													<option  data-parent="Reverb" value="right-dry">Dry</option>
+													<option  data-parent="Reverb" value="right-wet">Wet</option>
+													<option  data-parent="Reverb" value="right-time">Time</option>
+													<option  data-parent="Reverb" value="right-reverbgain">Gain</option>
+												</optgroup>
+											</select>
 										</div>
 									 </div>
 								</form>
-								<p class="center"><button class="btn btn-info">Add Configuration</button></p>
 							</div>
 						</div>
+						<p class="center"><button class="btn btn-inverse btn-large" id="config" onclick="addconfig()">Add Configuration</button></p>
 					</div>
+					
 				</div>
-				<div class="span6 offset1 well side" id="trackarea">
-					<p class="center"><button class="btn button btn-primary" id="upload">Upload</button></p>
-					<table class="table table bordered" id="tracktable">
-						<thead>
-							<tr>
-								<th>
-									ID
-								</th>
-								<th>
-									Name
-								</th>
-								<th>
-									Location
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							
-						</tbody>
-					</table>
-				</div>
+				<p class="center"><button class="btn btn-info btn-large">View All Configurations</button></p>
 			</div>
 		</div>
 	</body>
 	<script>
 		var trackcount = 0;
 		$(document).ready(function() {
-			$(".selectBox").selectBox();
-		
+			$("#trackarea").modal('hide');
+			$(".selectBox").selectBox().change(function() {
+				var selected = $(this.options[this.selectedIndex]);
+				var parent = selected.attr('data-parent');
+				
+				$(".selectBox-label").text(parent + " - " + selected.text());
+			});
+			
 			$(".dropdown-toggle").dropdown();
 			$(".section").popover();
 			$(".draggable").draggable();
 			$("#display-progress").hide();
 			$(".dropdown-submenu li").click(assign);
 			
-			$(".btn.button").click(function(e) {
-				var id = $(this).attr('id');
-				
-				if(id === "start") {
-					$(this).button('loading');
-				} else if(id === "stop") {
-					stop();
-				}
-			
-				javabuttonclick(id);
-			});
+			$(".btn.button").click(clickbtn);
 			
 			ready();
 		});
+		
+		function audioclick() {
+			uploadaudioclick("Fight Club");
+		}
+		
+		function clickbtn(e) {
+			var id = $(this).attr('id');
+			
+			if(id === "start") {
+				$(this).button('loading');
+			} else if(id === "stop") {
+				stop();
+			}
+		
+			javabuttonclick(id);
+		}
 		
 		function stop() {
 			$("#stop").button('loading');
@@ -296,8 +336,8 @@
 		
 		function loadtrack(track) {
 			var id = $("#tracktable tbody tr").length + 1;
-			$("#tracktable tbody").append("<tr><td>" + id + "</td><td>" + track.name + "</td><td>" + track.absolutelocation + "</td></tr>");
-			$("#audio-optgroup").append('<option id="' + id + '">' + track.name + '</option>');
+			//$("#tracktable tbody").append("<tr><td>" + id + "</td><td>" + track.name + "</td></tr>");
+			$(".audio").append('<option id="' + id + '" value="' + track.absolutelocation + '">' + track.name + '</option>');
 		}
 		
 		function loaded() {
@@ -317,10 +357,6 @@
 			}, 300);
 		}
 		
-		function uploadclick(e) {
-			uploadclick();
-		}
-		
 		function assign(e) {
 			var text = $($(e.currentTarget).children('a')[0]).text();
 			var parentassign = $(e.currentTarget).parent().parent().parent().parent().children('.assign-btn');
@@ -335,13 +371,24 @@
 			obtainconfiguration(JSON.stringify(config));
 		}
 		
-		function addNewTrack(json) {
-			var $newTrack = $('<div class="track well center draggable span6" data-path="' + json.absolutelocation + '"><p class="label">' + ++trackcount + "</p><br />" + json.name + '</div>');
-			$('#tracklist').append($newTrack);
-		}
-		
 		function leave() {
 			javaendprogram();
+		}
+		
+		function addconfig() {
+			var lhandstate = $('input[name="left-handstate"]:checked').attr('value');
+			var rhandstate = $('input[name="right-handstate"]:checked').attr('value');
+			var audio = $('#handstate-audio').val();
+			
+			var leftaxis = $("#left-axis").val();
+			var lefteffect = $("#left-effect").val();
+			
+			var rightaxis = $("#right-axis").val();
+			var righteffect = $("#right-effect").val();
+			
+			sendconfig(lhandstate,rhandstate,audio,leftaxis,lefteffect,rightaxis,righteffect);
+		
+			$(".alert").fadeIn(500).delay(1000).fadeOut(500);
 		}
 	</script>
 </html>

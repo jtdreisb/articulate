@@ -1,4 +1,4 @@
 
 public enum Side {
-	LEFT, RIGHT
+	L, R
 }
