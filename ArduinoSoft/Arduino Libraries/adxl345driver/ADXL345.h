@@ -20,7 +20,8 @@
 /* -- ADXL345 addresses --*/
 #define ADXL345_ADDR_ALT_HIGH 0x1D // ADXL345 address when ALT is connected to HIGH
 #define ADXL345_ADDR_ALT_LOW  0x53 // ADXL345 address when ALT is connected to LOW
-#define ADXL345_DEVID_VAL 0x53 //Read only value stored in DEVID 
+#define ADXL345_DEVID_VAL_HIGH 0x53 //Read only value stored in DEVID 
+#define ADXL345_DEVID_VAL_LOW 0xE5 //Read only value stored in DEVID 
 
 /* ------- Register names ------- */
 #define ADXL345_DEVID 0x00
@@ -109,6 +110,7 @@ public:
   void readAccel(int* x, int* y, int* z);
   void get_Gxyz(float *xyz);
   bool testConnection();
+  byte ID();
 
   void setTapThreshold(int tapThreshold);
   int getTapThreshold();

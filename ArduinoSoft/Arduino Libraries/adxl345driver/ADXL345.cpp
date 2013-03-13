@@ -42,7 +42,18 @@ void ADXL345::powerOn() {
 bool ADXL345::testConnection(){
   byte id =0;
   readFrom(ADXL345_DEVID, 1, &id);
-  return id == ADXL345_DEVID_VAL;
+  if(_dev_address == ADXL345_ADDR_ALT_LOW){
+    return id == ADXL345_DEVID_VAL_LOW;
+  }else if(_dev_address == ADXL345_ADDR_ALT_HIGH){
+    return id == ADXL345_DEVID_VAL_HIGH;
+  }
+  return 0; 
+}
+
+byte ADXL345::ID(){
+  byte id =0;
+  readFrom(ADXL345_DEVID, 1, &id);
+  return id;
 }
 
 // Reads the acceleration into an array of three places
