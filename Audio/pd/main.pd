@@ -1,4 +1,4 @@
-#N canvas 0 22 1421 841 10;
+#N canvas 1 22 996 797 10;
 #X obj -261 44 suit;
 #X obj 839 43 config;
 #X msg -263 -69 BTN R 1;
@@ -116,7 +116,7 @@ STATE 2 0 ACC L X pitchshift 3 \; config_ctl STATE 2 0 \;;
 #X msg 1159 484 \; config_ctl STATE 1 0 ACC L X vibrato 0 \; config_ctl
 STATE 1 0 ACC L Y vibrato 1 \; output_ctl vibrato mult 0 0.5 \; output_ctl
 vibrato add 0 0.25 \; output_ctl vibrato mult 1 0.5 \; \; config_ctl
-STATE 2 0 ACC L X pitchshift 1 \; config_ctl STATE 2 0 ACC L Y pitchshift
+STATE 2 0 ACC L X pitchshift \; config_ctl STATE 2 0 ACC L Y pitchshift
 0 \; output_ctl pitchshift mult 0 0.1 \; output_ctl pitchshift add
 0 0.5 \;;
 #X connect 0 0 18 0;
