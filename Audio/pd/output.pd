@@ -1,5 +1,5 @@
 #N canvas 548 29 723 609 10;
-#X obj 101 106 cnv 15 600 90 empty empty empty 20 12 0 14 -233017 -66577
+#X obj 101 106 cnv 15 300 90 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #X obj 195 729 dac~;
 #X obj 114 122 lib/smp-play2;
@@ -11,6 +11,8 @@
 -1 -1;
 #X obj 369 188 inlet control;
 #X obj 369 213 route play;
+#X text 270 214 RESET:;
+#X obj 473 170 inlet reset;
 #X connect 2 0 5 0;
 #X connect 2 1 5 1;
 #X connect 3 0 2 1;
@@ -21,4 +23,5 @@
 #X connect 7 0 5 3;
 #X connect 8 0 9 0;
 #X connect 9 1 5 2;
-#X coords 0 -1 1 1 602 102 1 100 100;
+#X connect 11 0 7 0;
+#X coords 0 -1 1 1 302 602 1 100 100;
