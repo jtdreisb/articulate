@@ -1,4 +1,4 @@
-#N canvas 0 22 1421 841 10;
+#N canvas 0 22 1421 752 10;
 #X floatatom -243 86 5 0 0 0 - - -;
 #X text -306 84 # Clients:;
 #X obj -330 66 netreceive 8888;
