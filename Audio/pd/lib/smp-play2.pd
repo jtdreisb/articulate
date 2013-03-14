@@ -1,4 +1,4 @@
-#N canvas 34 37 746 669 10;
+#N canvas 137 118 746 669 10;
 #X obj 389 176 soundfiler;
 #X obj 388 123 pack s f;
 #X obj 472 66 f \$0;
@@ -130,6 +130,7 @@
 #X connect 4 0 1 0;
 #X connect 6 1 2 0;
 #X restore 381 93 pd change-symbol;
+#X obj 244 148 inlet songname;
 #X connect 0 0 5 0;
 #X connect 1 0 12 0;
 #X connect 2 0 1 1;
@@ -194,4 +195,6 @@
 #X connect 71 0 72 0;
 #X connect 73 0 1 0;
 #X connect 73 0 23 0;
+#X connect 74 0 27 1;
+#X connect 74 0 73 0;
 #X coords 0 -1 1 1 210 70 1 50 50;
