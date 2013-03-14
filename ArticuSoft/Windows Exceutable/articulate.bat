@@ -1,0 +1,1 @@
+java -jar Articulate.jar

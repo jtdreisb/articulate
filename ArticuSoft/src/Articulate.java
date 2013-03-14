@@ -268,8 +268,8 @@ final BrowserFunction function = new ConfigListener(browser, name);
 				}
 				start((String) arguments[1]);
 			}else if (btn.equals("stop")) {
-				//ae.dispose();
-				//child.destroy();
+				ae.dispose();
+				child.destroy();
 			} else if(btn.equals("exit")) {
 				exit();
 			}
@@ -306,9 +306,9 @@ final BrowserFunction function = new ConfigListener(browser, name);
 			shell.close();
 			try {
 				if(child != null) {
-					//child.destroy();
+					child.destroy();
 				}
-				//ae.dispose();
+				ae.dispose();
 			} catch(Exception e) {
 				//meh
 				//Don't know why we would be here

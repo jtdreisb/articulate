@@ -251,4 +251,3 @@ void send_flex(char* dev, int *val){
   xbee.println(flex);
   
 }
-
