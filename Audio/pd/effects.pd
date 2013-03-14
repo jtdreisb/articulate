@@ -1,4 +1,4 @@
-#N canvas 174 22 1436 752 10;
+#N canvas 4 22 1436 752 10;
 #X obj 513 436 lib/st-bitcrusher;
 #X obj 511 536 lib/st-pitchshifter;
 #X obj 513 626 lib/st-FFTreverb;
