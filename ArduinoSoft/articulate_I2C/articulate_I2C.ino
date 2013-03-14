@@ -3,29 +3,31 @@
 #include <ADXL345.h>
 #include <HMC5843.h>
 #include <ITG3200.h>
+#include <I2Cdev.h>
+#include <HMC5843.h>
 
 
-SoftwareSerial xbee(2,3);
+SoftwareSerial xbee(4,5); //Rx, Tx
 ADXL345 adxl_L;
 ADXL345 adxl_R;
 ITG3200 gyro;
 HMC5843 mag;
 
-#define DEV_ACCEL_L "ACC_L"
-#define DEV_ACCEL_R "ACC_R"
+#define DEV_ACCEL_L "ACC L"
+#define DEV_ACCEL_R "ACC R"
 
 #define DEV_GYRO "GYRO"
 #define DEV_MAGN "MAGN"
 
-#define FINGER_R1_ON "BTN R1"
-#define FINGER_R1_OFF "BTN R10"
-#define FINGER_R2_ON "BTN R2"
-#define FINGER_R2_OFF "BTN R20"
+#define FINGER_R1_ON "BTN R 1"
+#define FINGER_R1_OFF "BTN R 10"
+#define FINGER_R2_ON "BTN R 2"
+#define FINGER_R2_OFF "BTN R 20"
 
-#define FINGER_L1_ON "BTN L1"
-#define FINGER_L1_OFF "BTN L10"
-#define FINGER_L2_ON "BTN L2"
-#define FINGER_L2_OFF "BTN L20"
+#define FINGER_L1_ON "BTN L 1"
+#define FINGER_L1_OFF "BTN L 10"
+#define FINGER_L2_ON "BTN L 2"
+#define FINGER_L2_OFF "BTN L 20"
 
 #define FLEX_L "FLEX L"
 #define FLEX_R "FLEX R"
@@ -53,8 +55,8 @@ boolean fingerL2_contact = false;
 //flexometer
 int Lflex = 0;
 int Rflex = 0;
-int Lflex_pin = A3;
-int Rflex_pin = A4;
+int Lflex_pin = A0;
+int Rflex_pin = A1;
 
 //accelerometer readings
 int aRx = 0;
@@ -84,7 +86,6 @@ void send_flex(char*, int);
 
 void setup() {
   //set analog reference voltage to 3.3v 
-  //NOT NECESSARY FOR LILYPAD, AS AFREF IS TIED TO VCC
   //analogReference(EXTERNAL);
   
   //Initialize I2C bus
@@ -96,36 +97,46 @@ void setup() {
   pinMode(finger_R2, INPUT_PULLUP);
   pinMode(finger_L1, INPUT_PULLUP); 
   pinMode(finger_L2, INPUT_PULLUP);  
-
+  pinMode(Lflex_pin, INPUT);
+  digitalWrite(Lflex_pin, HIGH);
+  pinMode(Rflex_pin, INPUT);
+  digitalWrite(Rflex_pin, HIGH);
+  
   xbee.println("Initializing I2 devices..");
   //Initialize devices
-  adxl_L.init(ADXL345_ADDR_ALT_HIGH);
+ // adxl_L.init(ADXL345_ADDR_ALT_HIGH);
   adxl_R.init(ADXL345_ADDR_ALT_LOW);
-  adxl_L.powerOn();
+  //adxl_L.powerOn();
   adxl_R.powerOn();
   
-  gyro.initialize();
-  mag.initialize();
+  //gyro.initialize();
+  //mag.initialize();
 
   // verify connection
   xbee.println("Testing device connections...");
-  xbee.println(adxl_L.testConnection() ? "Left ADXL345 connection successful" : "Left ADXL345 connection failed");
+  
+  //xbee.println(adxl_L.testConnection() ? "Left ADXL345 connection successful" : "Left ADXL345 connection failed");
   xbee.println(adxl_R.testConnection() ? "Right ADXL345 connection successful" : "Right ADXL345 connection failed");
-  xbee.println(mag.testConnection() ? "HMC5843 connection successful" : "HMC5843 connection failed");
-  xbee.println(gyro.testConnection() ? "ITG3200 connection successful" : "ITG3200 connection failed");
+  //xbee.println(mag.testConnection() ? "HMC5843 connection successful" : "HMC5843 connection failed");
+  //xbee.println(gyro.testConnection() ? "ITG3200 connection successful" : "ITG3200 connection failed");
 
+  xbee.println(adxl_R.ID);
 }
 
 void loop() {
+    
   //Right accelerometer input
   if(adxl_L.status){
-    readAccel(&aLx, &aLy, &aLz);
-    send_3axis(DEV_ACCEL_L, &aLx, &aLy, &aLz);
+    adxl_L.readAccel(&aLx, &aLy, &aLz);
+    //send_3axis(DEV_ACCEL_L, &aLx, &aLy, &aLz);
+    delay(10);
   }
+  
   //Right accelerometer input
   if(adxl_R.status){
-    readAccel(&aRx, &aRy, &aRz);
-    send_3axis(DEV_ACCEL_R, &aRx, &aRy, &aRz);
+    adxl_R.readAccel(&aRx, &aRy, &aRz);
+   // send_3axis(DEV_ACCEL_R, &aRx, &aRy, &aRz);
+    delay(10);
   }
   
   // read raw heading measurements from device NOT FILTERED OR SCALED
@@ -136,11 +147,14 @@ void loop() {
   
   
   //Flex sensors
-  Lflex = analogRead(Lflex_pin);
-  Rflex = analogRead(Rflex_pin);
-  send_flex(FLEX_L, &Lflex);
-  send_flex(FLEX_R, &Rflex); 
+ // Lflex = analogRead(Lflex_pin);
+  //delay(15);
+  //Rflex = analogRead(Rflex_pin);
+  //send_flex(FLEX_L, &Lflex);
+  //delay(15);
+  //send_flex(FLEX_R, &Rflex); 
     
+  //xbee.println("Test");
   
   fingerR1_state = digitalRead(finger_R1);
   fingerR2_state = digitalRead(finger_R2);
@@ -148,7 +162,7 @@ void loop() {
   fingerL2_state = digitalRead(finger_L2);
   
   if ( fingerR1_state == LOW && !fingerR1_contact){
-    if ((millis() - lastDebounceTime_R2) > debounceDelay){
+    if ((millis() - lastDebounceTime_R1) > debounceDelay){
       send_finger(FINGER_R1_ON);
       fingerR1_contact = true; 
     }
@@ -176,7 +190,7 @@ void loop() {
   }
   
    if ( fingerL1_state == LOW && !fingerL1_contact){
-    if ((millis() - lastDebounceTime_L2) > debounceDelay){
+    if ((millis() - lastDebounceTime_L1) > debounceDelay){
       send_finger(FINGER_L1_ON);
       fingerL1_contact = true; 
     }
@@ -190,7 +204,7 @@ void loop() {
   }
   
    if ( fingerL2_state == LOW && !fingerL2_contact){
-    if ((millis() - lastDebounceTime_R2) > debounceDelay){
+    if ((millis() - lastDebounceTime_L2) > debounceDelay){
       send_finger(FINGER_L2_ON);
       fingerL2_contact = true; 
     }
@@ -208,17 +222,18 @@ void loop() {
   last_fingerR1_state = fingerR1_state;
   last_fingerR2_state = fingerR2_state;
   
-  delay(5);
+  delay(100);
 }
 
 void send_3axis(char* dev, int *x, int *y, int *z){
   String data_str = dev;
-  data_str = data_str + " " + *x + " " + *y + " " + *z;
+  data_str = data_str + " " + *x + " " + *y + " " + *z + ";";
   xbee.println(data_str);
 }
 
 void send_finger(char* finger){
-  //String finger = index;
+  String outFinger = finger;
+  outFinger = outFinger + ";";
   xbee.println(finger);
 }
 
@@ -228,13 +243,14 @@ void send_flex(char* dev, int *val){
   int scaled_val;
   String flex = dev;
   
-  scaled_val = (*val - 375) * 0.75;
+  /*scaled_val = (*val - 375) * 0.75;
   if (scaled_val < 0){
     scaled_val = 0;
   }else if (scaled_val > 255){
     scaled_val = 255;
-  }
-  flex = flex + " " + scaled_val;
+  }*/
+  scaled_val = *val;
+  flex = flex + " " + scaled_val + ";";
   xbee.println(flex);
   
 }
