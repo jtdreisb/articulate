@@ -40,6 +40,18 @@ public class AudioEngine {
 		out.flush();
 	}
 	
+	public static class LoadConfiguration implements AudioEngineConfiguration {
+		private String track;
+		
+		public LoadConfiguration(String t) {
+			track = t.replace("\\", "/");
+		}
+		
+		public String toString() {
+			return String.format("LOAD %s;", track);
+		}
+	}
+	
 	public static class SoundConfiguration implements AudioEngineConfiguration {
 		private Handstate right;
 		private Handstate left;
@@ -50,12 +62,12 @@ public class AudioEngine {
 			right = r;
 			left = l;
 			this.mode = mode;
-			soundClip = clip;
+			soundClip = clip.replace("\\", "/");
 		}
 		
 		public String toString() {
 			//STATE HANDSTATE_L HANDSTATE_R ENTER/EXIT SOUND
-			return String.format("STATE %0%1 %2 %3", right, left, mode, soundClip);
+			return String.format("STATE %s%s %s %s;", right.handstateName(), left.handstateName(), mode.modeName(), soundClip);
 		}
 	}
 	
@@ -78,7 +90,7 @@ public class AudioEngine {
 		
 		public String toString() {
 			//STATE HANDSTATE_L HANDSTATE_R SENSOR (L/R) (X/Y/Z) (EFFECT [modulation index]<Format ex: bitcrush 0>)
-			return String.format("STATE %0%1 %2 %3 %4 %5", left, right, sensor, side, direction, effect);
+			return String.format("STATE %s%s %s %s %s %s;", left.handstateName(), right.handstateName(), sensor.sensorName(), side.sideName(), direction.accName(), effect);
 		}
 	}
 }

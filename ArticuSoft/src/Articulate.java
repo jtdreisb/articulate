@@ -2,10 +2,9 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.filechooser.FileFilter;
+import gnu.io.*;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -35,7 +34,7 @@ public class Articulate {
 	
 	public static ArrayList<AudioEngineConfiguration> configurations;
 
-	public Articulate(Dimension size) {
+	public Articulate(Dimension size) {		
 		configurations = new ArrayList<AudioEngineConfiguration>();
 		
 		display = new Display();
@@ -53,6 +52,7 @@ public class Articulate {
 		addHtmlListener(browser, "javabuttonclick");
 		addConfigListener(browser, "sendconfig");
 		addReadyListener(browser, "ready");
+		//addViewConfigListener(browser, "viewconfig");
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
 				display.sleep();
@@ -106,6 +106,45 @@ public class Articulate {
 		});
 	}
 	
+	/*private static void addViewConfigListener(final Browser browser, String name) {
+final BrowserFunction function = new ConfigListener(browser, name);
+		
+		browser.addProgressListener(new ProgressAdapter() {
+			public void completed(ProgressEvent event) {
+				browser.addLocationListener(new LocationAdapter() {
+					public void changed(LocationEvent event) {
+						browser.removeLocationListener(this);
+						function.dispose();
+					}
+				});
+			}
+		});
+	}
+	
+	private static class ConfigListener extends BrowserFunction {
+		public ConfigListener(Browser browser, String name) {
+			super(browser, name);
+		}
+		
+		public Object function(Object[] arguments) {
+			String obj = "[";
+			
+			for(int n = 0; n < configurations.size(); n++) {
+				obj += configurations.get(n).toString();
+				
+				if(n < configurations.size() - 1) {
+					obj += ",";
+				}
+			}
+			
+			obj += "]";
+			
+			browser.execute("showconfigs('" + obj + "');");
+			
+			return null;
+		}
+	}*/
+	
 	private static class OnReady extends BrowserFunction {
 
 		public OnReady(Browser browser, String name) {
@@ -116,6 +155,17 @@ public class Articulate {
 			if(!isReady) {
 				loadDefaultSounds();
 			}
+			
+			Enumeration<?> portlist = CommPortIdentifier.getPortIdentifiers();
+			CommPortIdentifier portid;
+			while(portlist.hasMoreElements()) {
+				portid = (CommPortIdentifier) portlist.nextElement();
+				
+				if(portid.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+					browser.execute("addport('" + portid.getName() + "');");
+				}
+			}
+			
 			isReady = true;
 			return null;
 		}
@@ -126,37 +176,79 @@ public class Articulate {
 			for (final File fileEntry : file.listFiles()) {
 				Track t = new Track(fileEntry.getName(), fileEntry.getAbsolutePath());
 				browser.execute("loadtrack(" + t.toString() + ");");
-				System.out.println(fileEntry.getAbsolutePath());
 			}
 		}
 	}
 	
 	private static class ObtainConfiguration extends BrowserFunction {
-
 		public ObtainConfiguration(Browser browser, String name) {
 			super(browser, name);
 		}
 		
 		public Object function(Object[] arguments) {
-			System.out.println("lhandstate = " + arguments[0]);
-			System.out.println("rhandstate = " + arguments[1]);
-			System.out.println("audio = " + arguments[2]);
-			System.out.println("left axis = " + arguments[3]);
-			System.out.println("left effect = " + arguments[4]);
-			System.out.println("right axis = " + arguments[5]);
-			System.out.println("right effect = " + arguments[6]);
-			
 			Handstate left = Handstate.values()[Integer.parseInt((String)arguments[0])];
 			Handstate right = Handstate.values()[Integer.parseInt((String)arguments[1])];
-			String audio = (String) arguments[3];
+			String audio = (String) arguments[2];
 			Mode mode = Mode.ENTER;
 			
-			if(audio != null && !audio.equals("")) {
+			if(!audio.equals("-1")) {
 				AudioEngine.SoundConfiguration sc = new AudioEngine.SoundConfiguration(left, right, mode, audio);
 				configurations.add(sc);
 			}
 			
+			String lefteffect = (String) arguments[4];
+			String righteffect = (String) arguments[6];
+			
+			if(!lefteffect.equals("-1")) {
+				String lefteffectname = getEffectName(lefteffect);
+				int lefteffectvalue = getEffectValue(lefteffect);
+				AccelerometerDirection leftdir = AccelerometerDirection.valueOf((String) arguments[3]);
+				AudioEngine.EffectConfiguration lec = new AudioEngine.EffectConfiguration(right, left, Sensor.ACC, Side.L, leftdir, lefteffectname + " " + lefteffectvalue);
+				configurations.add(lec);
+			}
+			
+			if(!righteffect.equals("-1")) {
+				String righteffectname = getEffectName(righteffect);
+				int righteffectvalue = getEffectValue(righteffect);
+				AccelerometerDirection rightdir = AccelerometerDirection.valueOf((String) arguments[5]);
+				AudioEngine.EffectConfiguration rec = new AudioEngine.EffectConfiguration(right, left, Sensor.ACC, Side.R, rightdir, righteffectname + " " + righteffectvalue);
+				configurations.add(rec);
+			}
+			
 			return null;
+		}
+		
+		private String getEffectName(String name) {
+			return name.split("-")[1];
+		}
+		
+		private int getEffectValue(String effect) {
+			int value = -1;
+			String effectname = getEffectName(effect);
+			effect = effect.split("-")[2];
+			
+			if(effectname.equals("BitCrush")) {
+				if(effect.equals("bitdepth")) value = 0;
+				if(effect.equals("samplerate")) value = 1;
+				if(effect.equals("gain")) value = 2;
+			} else if(effectname.equals("Vibrato")) {
+				if(effect.equals("speed")) value = 0;
+				if(effect.equals("depth")) value = 1;
+				if(effect.equals("feedback")) value = 2;
+				if(effect.equals("gain")) value = 3;
+			} else if(effectname.equals("PitchShift")) {
+				if(effect.equals("transpose")) value = 0;
+				if(effect.equals("window")) value = 1;
+				if(effect.equals("delay")) value = 2;
+				if(effect.equals("gain")) value = 3;
+			} else if(effectname.equals("Reverb")) {
+				if(effect.equals("dry")) value = 0;
+				if(effect.equals("wet")) value = 1;
+				if(effect.equals("time")) value = 2;
+				if(effect.equals("gain")) value = 3;
+			}
+			
+			return value;
 		}
 	}
 	
@@ -170,10 +262,14 @@ public class Articulate {
 			System.out.println("Id: " + arguments[0]);
 
 			if (btn.equals("start")) {
-				start();
+				if(!((String)arguments[2]).equals("-1")) {
+					AudioEngine.LoadConfiguration lc = new AudioEngine.LoadConfiguration((String) arguments[2]);
+					configurations.add(lc);
+				}
+				start((String) arguments[1]);
 			}else if (btn.equals("stop")) {
-				ae.dispose();
-				child.destroy();
+				//ae.dispose();
+				//child.destroy();
 			} else if(btn.equals("exit")) {
 				exit();
 			}
@@ -181,12 +277,15 @@ public class Articulate {
 			return null;
 		}
 		
-		private void start(){
-			String command = "pd AudioEngine/pdserver.pd";
+		private void start(String port){
+			String command = "pd AudioEngine/pdserver.pd " + port;
 			browser.execute("loaded()");
 		    try {
 				child = Runtime.getRuntime().exec(command);
+				Thread.sleep(1000);
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -194,7 +293,9 @@ public class Articulate {
 		    Thread t = new Thread(){
 		        public void run() {
 		            ae = new AudioEngine();
-				    ae.write("Test Data;");
+		            for(AudioEngineConfiguration aec : configurations) {
+		            	ae.write(aec.toString());
+		            }
 		        }
 		    };
 		    t.start();
@@ -205,9 +306,9 @@ public class Articulate {
 			shell.close();
 			try {
 				if(child != null) {
-					child.destroy();
+					//child.destroy();
 				}
-				ae.dispose();
+				//ae.dispose();
 			} catch(Exception e) {
 				//meh
 				//Don't know why we would be here
@@ -226,33 +327,6 @@ public class Articulate {
 			ext = s.substring(i + 1).toLowerCase();
 		}
 		return ext;
-	}
-
-	private static class MusicFilter extends FileFilter {
-
-		@Override
-		public boolean accept(File f) {
-			if (f.isDirectory()) {
-				return true;
-			}
-
-			String extension = getExtension(f);
-
-			if (extension != null) {
-				if (extension.equals(MP3) || extension.equals(WAV)
-						|| extension.equals(MIDI)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-			return false;
-		}
-
-		@Override
-		public String getDescription() {
-			return "(.mp3, .wav, .midi) Audio Format Files";
-		}
 	}
 	
 	private static class Track {
