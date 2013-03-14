@@ -39,7 +39,7 @@
 #X obj 307 229 r \$0-reset;
 #X msg 342 283 1;
 #X obj 387 226 r \$0-vibrato;
-#X obj 512 519 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 512 519 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 512 609 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;

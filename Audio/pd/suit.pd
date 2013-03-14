@@ -69,12 +69,12 @@
 #X obj 559 -73 route L R;
 #X text 542 210 Hand Buttons;
 #X obj 559 240 vradio 15 1 0 3 empty empty empty 0 -8 0 10 -262144
--1 -1 0;
+-1 -1 2;
 #X text 544 254 I;
 #X text 544 269 M;
 #X text 544 239 N;
 #X obj 579 240 vradio 15 1 0 3 empty empty empty 0 -8 0 10 -262144
--1 -1 1;
+-1 -1 0;
 #X text 582 223 R;
 #X text 562 223 L;
 #X obj 610 -44 print suit_button;
@@ -95,6 +95,8 @@
 #X msg 524 61 0;
 #X obj 550 -19 select 10 20;
 #X msg 584 21 0;
+#X obj -196 144 loadbang;
+#X msg -196 166 50;
 #X connect 0 0 77 0;
 #X connect 0 1 1 0;
 #X connect 7 0 25 0;
@@ -170,4 +172,13 @@
 #X connect 89 1 90 0;
 #X connect 89 2 70 0;
 #X connect 90 0 70 0;
+#X connect 91 0 92 0;
+#X connect 92 0 48 0;
+#X connect 92 0 49 0;
+#X connect 92 0 50 0;
+#X connect 92 0 40 0;
+#X connect 92 0 41 0;
+#X connect 92 0 42 0;
+#X connect 92 0 81 0;
+#X connect 92 0 83 0;
 #X coords 0 -1 1 1 602 200 1 20 100;
