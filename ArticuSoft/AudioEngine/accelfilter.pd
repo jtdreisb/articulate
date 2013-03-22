@@ -1,0 +1,14 @@
+#N canvas 662 166 778 557 10;
+#X obj 388 92 inlet X;
+#X obj 463 97 inlet Y;
+#X obj 548 100 inlet Z;
+#X obj 354 292 outlet X;
+#X obj 441 296 outlet Y;
+#X obj 536 291 outlet Z;
+#X obj 235 197 low_pass;
+#X obj 201 176 low_pass;
+#X obj 166 152 low_pass;
+#X text 143 71 TODO: Put in the low pass filters;
+#X connect 0 0 3 0;
+#X connect 1 0 4 0;
+#X connect 2 0 5 0;

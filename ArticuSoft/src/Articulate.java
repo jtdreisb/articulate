@@ -278,11 +278,13 @@ final BrowserFunction function = new ConfigListener(browser, name);
 		}
 		
 		private void start(String port){
-			String command = "pd AudioEngine/pdserver.pd " + port;
+			String command = "pd AudioEngine/main.pd";
+			String client = "./AudioEngine/netfunnel/netfunnel.exe " + port;
 			browser.execute("loaded()");
 		    try {
 				child = Runtime.getRuntime().exec(command);
 				Thread.sleep(1000);
+				Runtime.getRuntime().exec(client);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
